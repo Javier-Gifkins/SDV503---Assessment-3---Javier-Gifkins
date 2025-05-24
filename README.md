@@ -1,4 +1,4 @@
-//NOTE -  - Project Overview:
+//NOTE - Project Overview:
 
 Functionality:
 The patient Health Management System will allow patients to manage and update health records stored in a .json format. The project is to develop a command line program enabling users to create, read, update, and delete medical information. At the beginning I will have a prompt asking for an administrator password, if no password can be given the user may only be able to view their own records (no writing).
@@ -19,23 +19,16 @@ This program will organise and edit fictional patient records in the form of .js
 
 //NOTE - Instructions/Requirements
 
-readline (for input/output in terminal)
-
-fs (for reading/writing JSON files)
-
-JSON.parse() / JSON.stringify() (to manage the data)
-
 Environment: Node.js (install from nodejs.org)
-
-Run it from terminal: using node yourscript.js
+Run it from terminal: typing "node patientRecords.js"
 
 Use these built-in Node.js modules:
 
 readline for user input
-
+readline module (for input/output in terminal)
 fs for JSON file storage
+fs (File System module) for reading/writing JSON files
 
-No frontend or browser code is needed
 
 
 //NOTE - Psuedo Code
@@ -130,6 +123,7 @@ END
 
 //NOTE - Key Functions
 
+JSON.parse() / JSON.stringify() (to manage the data)
 createPatientRecord()
 newRecord()
 searchRecord()
