@@ -1,15 +1,13 @@
 //SECTION - Settings
 
-const gamemode = "Hard"
-const modegame = "Difficult"
+const adminPassword = "password123"
 
-
-
-
+const userLookup = "P-XGOYBH2F"
 
 //SECTION - Exporting Those Settings
 
 module.exports = {
-    gamemode,
-    modegame
+    adminPassword,
+    userLookup
+    
 };
