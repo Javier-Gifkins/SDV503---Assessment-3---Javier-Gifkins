@@ -50,10 +50,57 @@ function promptForPassword() {
     }
     });
 }
-function generateNewPatientID () {
+function generatePatientID () {
     return `P-${faker.string.alphanumeric(8).toUpperCase()}` // Gererating a new ID number with faker module
 }
 
+
+
+
+
+
+function savePatients(data) {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+}
+
+
+function createPatient() {
+    const patient = { patientId: generatePatientID() };
+    const patientInformation = [
+        { key: "name", prompt: "Name: " },
+        { key: "email", prompt: "Email: " },
+        { key: "phone", prompt: "Phone: " },
+        { key: "address", prompt: "Address: " },
+        { key: "city", prompt: "City: " },
+        { key: "country", prompt: "Country: " },
+        { key: "jobTitle", prompt: "Job Title: " },
+        { key: "birthDate", prompt: "Birth Date (yyyy/MM/DD): " },
+        { key: "bloodType", prompt: "Blood Type: " }
+    ];
+
+    let i = 0;
+
+    function nextQuestion() {
+        if (i < patientInformation.length) {
+            rl.question(patientInformation[i].prompt, (answer) => {
+                patient[patientInformation[i].key] = patientInformation[i].key === "birthDate"
+                    ? new Date(answer).toISOString()
+                    : answer;
+                i++;            
+                nextQuestion(); 
+            });
+
+        } else {
+
+            const patients = readAllPatients();
+            patients.push(patient);
+            savePatients(patients);
+            console.log("\nPatient Created:\n", patient);
+            rl.close();
+        }
+    }
+    nextQuestion();
+}
 
 
 
@@ -64,7 +111,7 @@ function generateNewPatientID () {
 //SECTION - Testing Section
 
 
-
+createPatient();
 
 // promptForPassword();
 
@@ -75,4 +122,4 @@ function generateNewPatientID () {
 // console.log("Found Patient: ", patient);
 
 // console.log(settings.adminPassword);
-console.log(generateNewPatientID());
+// console.log(generatePatientID());
