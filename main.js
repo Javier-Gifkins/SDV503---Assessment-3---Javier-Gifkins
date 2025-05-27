@@ -3,6 +3,8 @@
 const fs = require("fs");
 const readline = require("readline");
 
+
+
 const {faker} = require("@faker-js/faker")
 const path = require("path");
 const settings = require('./settings');
@@ -15,23 +17,15 @@ const rl = readline.createInterface({
 })
 
 
-//SECTION - Functions
+//SECTION - Security Functions
 
 function checkPassword(inputPassword) { 
-    return inputPassword === settings.adminPassword; // return true if inpue passweord scrict equals admin password found in settings.
-}
-function readAllPatients() {
-    const data = fs.readFileSync(filePath, "utf-8"); // this reads the userData.json file and encodes is as a utf8 string
-    return JSON.parse(data); // the string is then pasred and returned as a js object
-}
-function findPatientByID(id) {
-    const patients = readAllPatients(); // calls previous function to gather all userdata as a utf8 string
-    return patients.find((p) => p.patientId === id); // uses a find() method to search for the first ID match. returns undefined if no match is found.
+    return inputPassword === settings.adminPassword; // return true if inpu password scrict equals admin password found in settings.
 }
 function promptForPassword() {
     rl.question("Enter admin password, or press enter to continue as guest: ", (input) => {
-    const isAdmin = checkPassword(input); // isAdmin is defned as 
-
+        const isAdmin = checkPassword(input); // isAdmin is defned as 
+        
     if (isAdmin) {
         console.log("Admin access granted. You can now CRUD patient data.");
         let allPatients = readAllPatients();
@@ -51,7 +45,22 @@ function promptForPassword() {
     }
     });
 }
-function generatePatientID () {
+
+
+//SECTION - Data Read/Search Functions
+
+function findPatientByID(id) {
+    const patients = readAllPatients(); // calls previous function to gather all userdata as a utf8 string
+    return patients.find((p) => p.patientId === id); // uses a find() method to search for the first ID match. returns undefined if no match is found.
+}
+
+
+
+
+
+//SECTION - Data Editting Functions
+
+function generatePatientID () { // Function to Generate a random ID (P-ABH2QUHL)
     return `P-${faker.string.alphanumeric(8).toUpperCase()}` // Gererating a new ID number with faker module
 }
 function savePatients(data) {
@@ -59,18 +68,8 @@ function savePatients(data) {
 }
 function createPatient() {
     const patient = { patientId: generatePatientID() };
-    const patientInformation = [
-        { key: "name", prompt: "Name: " },
-        { key: "email", prompt: "Email: " },
-        { key: "phone", prompt: "Phone: " },
-        { key: "address", prompt: "Address: " },
-        { key: "city", prompt: "City: " },
-        { key: "country", prompt: "Country: " },
-        { key: "jobTitle", prompt: "Job Title: " },
-        { key: "birthDate", prompt: "Birth Date (yyyy/MM/DD): " },
-        { key: "bloodType", prompt: "Blood Type: " }
-    ];
 
+    let patientInformation = settings.patientInformation;
     let i = 0;
 
     function nextQuestion() {
@@ -102,6 +101,11 @@ function seeOwnInfo() {
 }
 
 
+
+function readAllPatients() {
+    const data = fs.readFileSync(filePath, "utf-8"); // this reads the userData.json file and encodes is as a utf8 string
+    return JSON.parse(data); // the string is then pasred and returned as a js object
+}
 
 
 
