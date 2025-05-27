@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const readline = require("readline");
+
 const {faker} = require("@faker-js/faker")
 const path = require("path");
 const settings = require('./settings');
@@ -53,17 +54,9 @@ function promptForPassword() {
 function generatePatientID () {
     return `P-${faker.string.alphanumeric(8).toUpperCase()}` // Gererating a new ID number with faker module
 }
-
-
-
-
-
-
 function savePatients(data) {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
 }
-
-
 function createPatient() {
     const patient = { patientId: generatePatientID() };
     const patientInformation = [
@@ -101,6 +94,15 @@ function createPatient() {
     }
     nextQuestion();
 }
+function seeOwnInfo() {
+    if(checkPassword === false) { // not admin
+        const data = fs.readFileSync(filePath, "utf-8"); // this reads the userData.json file and encodes is as a utf8 string
+        return JSON.parse(data); // the string is then pasred and returned as a js object
+    }
+}
+
+
+
 
 
 
@@ -111,7 +113,7 @@ function createPatient() {
 //SECTION - Testing Section
 
 
-createPatient();
+// createPatient();
 
 // promptForPassword();
 
