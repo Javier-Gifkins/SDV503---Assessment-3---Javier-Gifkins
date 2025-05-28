@@ -8,8 +8,9 @@ const readline = require("readline");
 const {faker} = require("@faker-js/faker")
 const path = require("path");
 const settings = require('./settings');
-
 const filePath = path.join(__dirname, "../SDV503---Assessment-3---Javier-Gifkins/userData.json");
+
+const patientInformation = settings.patientInformation;
 
 const rl = readline.createInterface({
     input : process.stdin,
@@ -49,12 +50,14 @@ function promptForPassword() {
 
 //SECTION - Data Read/Search Functions
 
+function readAllPatients() {
+    const data = fs.readFileSync(filePath, "utf-8"); // this reads the userData.json file and encodes is as a utf8 string
+    return JSON.parse(data); // the string is then pasred and returned as a js object
+}
 function findPatientByID(id) {
     const patients = readAllPatients(); // calls previous function to gather all userdata as a utf8 string
     return patients.find((p) => p.patientId === id); // uses a find() method to search for the first ID match. returns undefined if no match is found.
 }
-
-
 
 
 
@@ -68,8 +71,6 @@ function savePatients(data) {
 }
 function createPatient() {
     const patient = { patientId: generatePatientID() };
-
-    let patientInformation = settings.patientInformation;
     let i = 0;
 
     function nextQuestion() {
@@ -93,6 +94,7 @@ function createPatient() {
     }
     nextQuestion();
 }
+<<<<<<< Updated upstream
 function seeOwnInfo() {
     if(checkPassword === false) { // not admin
         const data = fs.readFileSync(filePath, "utf-8"); // this reads the userData.json file and encodes is as a utf8 string
@@ -105,10 +107,60 @@ function seeOwnInfo() {
 function readAllPatients() {
     const data = fs.readFileSync(filePath, "utf-8"); // this reads the userData.json file and encodes is as a utf8 string
     return JSON.parse(data); // the string is then pasred and returned as a js object
+=======
+function editPatientInfo() {
+    const patients = readAllPatients();
+
+    rl.question("Enter patient ID to edit: ", (id) => {
+        const patient = patients.find((p) => p.patientId === id);
+
+        if (!patient) {
+            console.log("Patient not found.");
+            rl.close();
+            return;
+        }
+
+        console.log("\nSelect the number of the field you want to edit:");
+        patientInformation.forEach((field, index) => {
+            console.log(`${index + 1}. ${field.prompt} (${patient[field.key]})`);
+        });
+
+        rl.question("\nType number to edit: ", (choice) => {
+            const index = parseInt(choice) - 1;
+
+            if (index >= 0 && index < patientInformation.length) {
+                const field = patientInformation[index];
+
+                rl.question(`Enter new ${field.prompt}`, (newValue) => {
+                    patient[field.key] = field.key === "birthDate"
+                        ? new Date(newValue).toISOString()
+                        : newValue;
+
+                    savePatients(patients);
+                    console.log("\nUpdated patient:\n", patient);
+                    rl.close();
+                });
+
+            } else {
+                console.log("Invalid selection.");
+                rl.close();
+            }
+        });
+    });
+>>>>>>> Stashed changes
 }
 
 
 
+
+
+// Uses the shared patientInformation array for DRYness.
+
+// Shows numbered options with current values.
+
+// Lets the user choose which field to update.
+
+// Handles invalid IDs and bad input cleanly.
 
 
 
@@ -117,6 +169,10 @@ function readAllPatients() {
 //SECTION - Testing Section
 
 
+<<<<<<< Updated upstream
+=======
+// editPatientInfo();
+>>>>>>> Stashed changes
 // createPatient();
 
 // promptForPassword();
