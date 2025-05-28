@@ -58,19 +58,55 @@ function findPatientByID(id) {
     const patients = readAllPatients(); // calls previous function to gather all userdata as a utf8 string
     return patients.find((p) => p.patientId === id); // uses a find() method to search for the first ID match. returns undefined if no match is found.
 }
-function seeOwnInfo() {
-    if(checkPassword === false) { // not admin
-        const data = fs.readFileSync(filePath, "utf-8"); // this reads the userData.json file and encodes is as a utf8 string
-        return JSON.parse(data); // the string is then pasred and returned as a js object
-    }
+
+
+function adminMenu() {
+    console.log("\n=== Admin Menu ===");
+    console.log("1. Create Record");
+    console.log("2. Read Record");
+    console.log("3. Update Record");
+    console.log("4. Delete Record");
+    console.log("5. Exit");
+
+    rl.question("Choose an option (1-5): ", (choice) => {
+        switch (choice) {
+            case "1":
+                createPatient();
+                break;
+            case "2":
+                rl.question("Enter Patient ID to look up: ", (id) => {
+                    const patient = findPatientByID(id);
+                    if (patient) {
+                        console.log("\nPatient Found: ", patient);
+                    } else {
+                        console.log("\nNo patient found with that ID.");
+                    }
+                    adminMenu(); // loop back
+                });
+                break;
+            case "3":
+                editPatientInfo(); // already closes rl after running
+                break;
+            case "4":
+                deletePatient(); // already closes rl after running
+                break;
+            case "5":
+                console.log("👋 Exiting program.");
+                rl.close();
+                break;
+            default:
+                console.log("⚠️ Invalid option. Please try again.");
+                adminMenu(); // repeat
+        }
+    });
 }
-function readAllPatients() {
-    const data = fs.readFileSync(filePath, "utf-8"); // this reads the userData.json file and encodes is as a utf8 string
-    return JSON.parse(data); // the string is then pasred and returned as a js object
-}
+
+
 
 
 //SECTION - Data Editting Functions
+
+
 
 function generatePatientID () { // Function to Generate a random ID (P-ABH2QUHL)
     return `P-${faker.string.alphanumeric(8).toUpperCase()}` // Gererating a new ID number with faker module
@@ -143,14 +179,13 @@ function editPatientInfo() {
         });
     });
 }
-
 function deletePatient() {
     const patients = readAllPatients();
 
     rl.question("Enter an ID to Delete Patient: ", (id) => {
         const index = patients.findIndex((p) => p.patientId === id);
 
-        if (index < -1) {
+        if (index === -1) {
             console.log("No Patient Found with That ID. ")
             rl.close();
             return;
@@ -174,7 +209,12 @@ function deletePatient() {
 
 
 
-// commit "Slight restructuring of the code, added a deletePatient function."
+//SECTION - Main Loop
+
+
+
+
+
 
 
 
@@ -182,11 +222,10 @@ function deletePatient() {
 
 
 
-deletePatient();
+adminMenu()
+// deletePatient();
 // editPatientInfo();
-
 // createPatient();
-
 // promptForPassword();
 
 // let allPatientInfo = readAllPatients();
