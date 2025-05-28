@@ -58,7 +58,16 @@ function findPatientByID(id) {
     const patients = readAllPatients(); // calls previous function to gather all userdata as a utf8 string
     return patients.find((p) => p.patientId === id); // uses a find() method to search for the first ID match. returns undefined if no match is found.
 }
-
+function seeOwnInfo() {
+    if(checkPassword === false) { // not admin
+        const data = fs.readFileSync(filePath, "utf-8"); // this reads the userData.json file and encodes is as a utf8 string
+        return JSON.parse(data); // the string is then pasred and returned as a js object
+    }
+}
+function readAllPatients() {
+    const data = fs.readFileSync(filePath, "utf-8"); // this reads the userData.json file and encodes is as a utf8 string
+    return JSON.parse(data); // the string is then pasred and returned as a js object
+}
 
 
 //SECTION - Data Editting Functions
@@ -94,20 +103,6 @@ function createPatient() {
     }
     nextQuestion();
 }
-<<<<<<< Updated upstream
-function seeOwnInfo() {
-    if(checkPassword === false) { // not admin
-        const data = fs.readFileSync(filePath, "utf-8"); // this reads the userData.json file and encodes is as a utf8 string
-        return JSON.parse(data); // the string is then pasred and returned as a js object
-    }
-}
-
-
-
-function readAllPatients() {
-    const data = fs.readFileSync(filePath, "utf-8"); // this reads the userData.json file and encodes is as a utf8 string
-    return JSON.parse(data); // the string is then pasred and returned as a js object
-=======
 function editPatientInfo() {
     const patients = readAllPatients();
 
@@ -121,12 +116,12 @@ function editPatientInfo() {
         }
 
         console.log("\nSelect the number of the field you want to edit:");
-        patientInformation.forEach((field, index) => {
-            console.log(`${index + 1}. ${field.prompt} (${patient[field.key]})`);
+        patientInformation.forEach((field, index) => { // Uses the shared patientInformation array for DRYness.
+            console.log(`${index + 1}. ${field.prompt} (${patient[field.key]})`); // Shows numbered options with current values.
         });
 
         rl.question("\nType number to edit: ", (choice) => {
-            const index = parseInt(choice) - 1;
+            const index = parseInt(choice) - 1; // Lets the user choose which field to update.
 
             if (index >= 0 && index < patientInformation.length) {
                 const field = patientInformation[index];
@@ -142,37 +137,54 @@ function editPatientInfo() {
                 });
 
             } else {
-                console.log("Invalid selection.");
+                console.log("Invalid selection."); // Handles invalid IDs and bad input cleanly.
                 rl.close();
             }
         });
     });
->>>>>>> Stashed changes
+}
+
+function deletePatient() {
+    const patients = readAllPatients();
+
+    rl.question("Enter an ID to Delete Patient: ", (id) => {
+        const index = patients.findIndex((p) => p.patientId === id);
+
+        if (index < -1) {
+            console.log("No Patient Found with That ID. ")
+            rl.close();
+            return;
+        }
+        console.log("Patient Found! ");
+        console.log(patients[index]);
+
+        rl.question("Are you sure you want to delete this patient? (yes/no): ", (confirm) => {
+            if (confirm.toLowerCase() === "yes") {
+                patients.splice(index, 1); // remove patient at index
+                savePatients(patients); // save updated data
+                console.log("✅ Patient deleted.");
+            } else {
+                console.log("❎ Deletion cancelled.");
+            }
+
+            rl.close();
+        });
+    });
 }
 
 
 
-
-
-// Uses the shared patientInformation array for DRYness.
-
-// Shows numbered options with current values.
-
-// Lets the user choose which field to update.
-
-// Handles invalid IDs and bad input cleanly.
-
-
+// commit "Slight restructuring of the code, added a deletePatient function."
 
 
 
 //SECTION - Testing Section
 
 
-<<<<<<< Updated upstream
-=======
+
+deletePatient();
 // editPatientInfo();
->>>>>>> Stashed changes
+
 // createPatient();
 
 // promptForPassword();
@@ -185,3 +197,7 @@ function editPatientInfo() {
 
 // console.log(settings.adminPassword);
 // console.log(generatePatientID());
+
+
+
+
