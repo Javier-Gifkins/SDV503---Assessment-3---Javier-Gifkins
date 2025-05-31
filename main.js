@@ -27,33 +27,7 @@ const rl = readline.createInterface({
 function checkPassword(inputPassword) { // function checking if input password matches the const found in setting.js returns boolian value, truthy or falsie depending on the input.
     return inputPassword === settings.adminPassword; // return true if input password scrict equals admin password found in settings. otherwise falsie.
 }
-function promptForPassword() { // this function prompts the user and calls checkPassword() with their input passed as the parameter. if checkpassword returns true they are given full admin access and the whole patient information file is logged to console. if checkpassword returns false, the user is questioned for their patient id. if it matches any information from the patient information file then that whole matching patient profile is logged to console.
 
-    rl.question("Enter admin password, or press enter to continue as guest: ", (input) => { //user is prompted and the input is asigned the value of whatever they type
-        const isAdmin = checkPassword(input); // isAdmin is assigned a boolian value of true or false depending on the outcome of checkPassword()
-        
-    if (isAdmin) { //if true
-        console.log("Admin access granted. You can now CRUD patient data.");
-        let allPatients = readAllPatients(); 
-        console.log(allPatients); //display entire patient info file
-        rl.close(); //closes the readline interface and continue
-
-    } else { //if isAdmin === false
-        console.log("Guest access granted. Read-only.");
-        rl.question("Enter patient ID to lookup: ", (id) => { //prompts user for input, a Patient ID in this case. and their input is passed to the parameter (id)
-
-        let patient = findPatientByID(id); //varible called patient is assigned the value of our previous users input, after its been passed through the findPatientByID function(a single Patient Profile)
-
-        if (patient) { //findPatientByID returns any data found and is displayed on console
-            console.log("\nPatient:", patient);
-        } else { //if findPatientByID returns undefined it means user input (id) is not a valid PatientId
-            console.log("Not a Valid Patient ID.");
-        }
-        rl.close(); //closes the readline interface and continue
-        });
-    }
-    });
-}
 
 
 //SECTION - Data Read/Search Functions
@@ -107,8 +81,8 @@ function adminMenu() {
 
 
 
-function generatePatientID () { // Function to Generate a random ID (P-ABH2QUHL)
-    return `P-${faker.string.alphanumeric(8).toUpperCase()}` // Gererating a new ID number with faker module
+function generatePatientID () { // Function to Generate a random ID e.g. (P-ABH2QUHL)
+    return `P-${faker.string.alphanumeric(8).toUpperCase()}` // Gererating a new ID number with faker module ("p-" + 8 random uppercase chars) in string format
 }
 function savePatients(data) {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
@@ -213,15 +187,62 @@ function deletePatient() {
 
 
 
+// function mainLoop() {
+//     console.log("Welcome to the Patient Record Health System!");
 
+   
+//     promptForPassword();
+
+   
+//     if (isAdmin) {
+//         adminMenu(); 
+//     } else {
+//         console.log("Guest access granted. Read-only."); 
+//         rl.close(); 
+//     }
+// }
+
+
+
+
+function mainLoop() { // this function prompts the user and calls checkPassword() with their input passed as the parameter. if checkpassword returns true they are given full admin access and the whole patient information file is logged to console. if checkpassword returns false, the user is questioned for their patient id. if it matches any information from the patient information file then that whole matching patient profile is logged to console.
+
+    rl.question("Enter admin password, or press enter to continue as guest: ", (input) => { //user is prompted and the input is asigned the value of whatever they type
+        const isAdmin = checkPassword(input); // isAdmin is assigned a boolian value of true or false depending on the outcome of checkPassword()
+        
+    if (isAdmin) { //if true
+        console.log("Admin access granted. You can now CRUD patient data.");
+        let allPatients = readAllPatients(); 
+        console.log(allPatients); //display entire patient info file
+        adminMenu(); // diplay admin menu right after
+        // rl.close(); //closes the readline interface and continue
+
+    } else { //if isAdmin === false
+        console.log("Guest access granted. Read-only.");
+        rl.question("Enter patient ID to lookup: ", (id) => { //prompts user for input, a Patient ID in this case. and their input is passed to the parameter (id)
+
+        let patient = findPatientByID(id); //varible called patient is assigned the value of our previous users input, after its been passed through the findPatientByID function(a single Patient Profile)
+
+        if (patient) { //findPatientByID returns any data found and is displayed on console
+            console.log("\nPatient:", patient);
+        } else { //if findPatientByID returns undefined it means user input (id) is not a valid PatientId
+            console.log("Not a Valid Patient ID.");
+        }
+        rl.close(); //closes the readline interface and continue
+        });
+    }
+    });
+}
 
 
 
 //SECTION - Testing Section
 
 
+mainLoop();
 
-adminMenu()
+
+// adminMenu()
 // deletePatient();
 // editPatientInfo();
 // createPatient();
