@@ -107,7 +107,7 @@ function createPatient() {
             patients.push(patient);
             savePatients(patients);
             console.log("\nPatient Created:\n", patient);
-            rl.close();
+            adminMenu();
         }
     }
     nextQuestion();
@@ -121,7 +121,7 @@ function editPatientInfo() {
         if (!patient) {
             console.log("Patient not found.");
             rl.close();
-            return;
+            adminMenu();
         }
 
         console.log("\nSelect the number of the field you want to edit:");
@@ -142,26 +142,26 @@ function editPatientInfo() {
 
                     savePatients(patients);
                     console.log("\nUpdated patient:\n", patient);
-                    rl.close();
+                    adminMenu();
                 });
 
             } else {
                 console.log("Invalid selection."); // Handles invalid IDs and bad input cleanly.
-                rl.close();
+                adminMenu();
             }
         });
     });
 }
 function deletePatient() {
-    const patients = readAllPatients();
+    const patients = readAllPatients(); // a variable patients is asigned the value of readallpatients(which reads the entire user file of user data)
 
-    rl.question("Enter an ID to Delete Patient: ", (id) => {
+    rl.question("Enter an ID to Delete Patient: ", (id) => { //prompts the user top type an ID whatever they type gets stored in (id) then findIndex searchs through the patients array for each patient and checking if patientId matches what has been typed
         const index = patients.findIndex((p) => p.patientId === id);
 
-        if (index === -1) {
+        if (index === -1) { //is index gets to the very end of the array , then no match has been found
             console.log("No Patient Found with That ID. ")
-            rl.close();
-            return;
+            adminMenu(); 
+            return; //exit function
         }
         console.log("Patient Found! ");
         console.log(patients[index]);
@@ -175,7 +175,7 @@ function deletePatient() {
                 console.log("❎ Deletion cancelled.");
             }
 
-            rl.close();
+            adminMenu();
         });
     });
 }
@@ -184,23 +184,6 @@ function deletePatient() {
 
 //SECTION - Main Loop
 
-
-
-
-// function mainLoop() {
-//     console.log("Welcome to the Patient Record Health System!");
-
-   
-//     promptForPassword();
-
-   
-//     if (isAdmin) {
-//         adminMenu(); 
-//     } else {
-//         console.log("Guest access granted. Read-only."); 
-//         rl.close(); 
-//     }
-// }
 
 
 
@@ -215,7 +198,6 @@ function mainLoop() { // this function prompts the user and calls checkPassword(
         let allPatients = readAllPatients(); 
         console.log(allPatients); //display entire patient info file
         adminMenu(); // diplay admin menu right after
-        // rl.close(); //closes the readline interface and continue
 
     } else { //if isAdmin === false
         console.log("Guest access granted. Read-only.");
@@ -228,7 +210,7 @@ function mainLoop() { // this function prompts the user and calls checkPassword(
         } else { //if findPatientByID returns undefined it means user input (id) is not a valid PatientId
             console.log("Not a Valid Patient ID.");
         }
-        rl.close(); //closes the readline interface and continue
+        adminMenu();
         });
     }
     });
@@ -239,11 +221,14 @@ function mainLoop() { // this function prompts the user and calls checkPassword(
 //SECTION - Testing Section
 
 
-mainLoop();
+// mainLoop();
+
+// patient = readAllPatients()
+// console.log(patient);
 
 
 // adminMenu()
-// deletePatient();
+deletePatient();
 // editPatientInfo();
 // createPatient();
 // promptForPassword();
