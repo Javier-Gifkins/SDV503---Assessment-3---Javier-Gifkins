@@ -1,7 +1,3 @@
-//NOTE - Ali please press alt Z so this looks a bit nicer :) 
-
-
-
 //SECTION - Imports
 
 const fs = require("fs");
@@ -14,7 +10,7 @@ const path = require("path");
 const settings = require('./settings');
 const filePath = path.join(__dirname, "../SDV503---Assessment-3---Javier-Gifkins/userData.json");
 
-const patientInformation = settings.patientInformation;
+// const patientInformation = settings.patientInformation;
 
 const rl = readline.createInterface({
     input : process.stdin,
@@ -81,10 +77,10 @@ function adminMenu() {
 
 
 
-function generatePatientID () { // Function to Generate a random ID e.g. (P-ABH2QUHL)
+function generatePatientID () { // Function to Generate a random ID e.g. (P-ABH2QUHL).
     return `P-${faker.string.alphanumeric(8).toUpperCase()}` // Gererating a new ID number with faker module ("p-" + 8 random uppercase chars) in string format
 }
-function savePatients(data) {
+function savePatients(data) { //this function uses the file system module to stringify the entire userdata file. then write the updated information back into the json file, effectively overwriting it with any udated information.
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
 }
 function createPatient() {
@@ -223,12 +219,12 @@ function mainLoop() { // this function prompts the user and calls checkPassword(
 
 // mainLoop();
 
-// patient = readAllPatients()
-// console.log(patient);
+patient = readAllPatients()
+console.log(patient);
 
 
 // adminMenu()
-deletePatient();
+// deletePatient();
 // editPatientInfo();
 // createPatient();
 // promptForPassword();
