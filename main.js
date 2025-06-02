@@ -19,7 +19,7 @@ const settings = require('./settings');
 //this line is "unpacking" the patient infromation array so we can access each value in the array instead of just the hole thing as one object.
 const patientInformation = settings.patientInformation;
 
-//this code creates a readline interface in node. its sets up inputs and outputs. allowing us to use these input output methods by using rl.question(). its a good way to handle command line inputs and prompts.
+//this code creates a readline interface in node. its sets up inputs and outputs. allowing us to use these methods by using rl.question(). its a good way to handle command line inputs and prompts.
 const rl = readline.createInterface({
     input : process.stdin,
     output : process.stdout,
@@ -86,7 +86,6 @@ function adminMenu() { //this function displays a menu for healthcare workers. i
 //SECTION - Data Editting Functions
 
 
-
 function generatePatientID () { // Function to Generate a random ID using faker module e.g. (P-ABH2QUHL).
     return `P-${faker.string.alphanumeric(8).toUpperCase()}` // Gererating a new ID number with faker module ("p-" + 8 random uppercase chars) in string format
 }
@@ -118,50 +117,46 @@ function createPatient() { //this fucntion creates a new patient record by askin
     }
     nextQuestion(); //nested function repeats itself.
 }
+function editPatientInfo() { //this function allows an administrator to edit existing patient records. it lets users select a patient by using pateitn ID, then asks which feild they would like to update. then saves the changes back into the userData file. 
+    const patients = readAllPatients(); //a variable is given the value of the entire patient information file.
 
+    rl.question("Enter patient ID to edit: ", (id) => { //readline prompt is used to gather a user id, which is stored in "id". 
+        const patient = patients.find((p) => p.patientId === id); //it then searches through all the userdata to locate a patient with a matching ID field.
 
-
-function editPatientInfo() {
-    const patients = readAllPatients();
-
-    rl.question("Enter patient ID to edit: ", (id) => {
-        const patient = patients.find((p) => p.patientId === id);
-
-        if (!patient) {
-            console.log("Patient not found.");
-            rl.close();
-            adminMenu();
+        if (!patient) { //if previous code remains undefined, then no match was found
+            console.log("No Patient Match Was Found."); //inform the user
+            adminMenu(); //returns to CRUD menu
         }
 
         console.log("\nSelect the number of the field you want to edit:");
         patientInformation.forEach((field, index) => { // Uses the shared patientInformation array for DRYness.
-            console.log(`${index + 1}. ${field.prompt} (${patient[field.key]})`); // Shows numbered options with current values.
+            console.log(`${index + 1}. ${field.prompt} (${patient[field.key]})`); // Shows each field with numbered options and current field values. +1 is used, because naturally the index starts at 0.
         });
 
-        rl.question("\nType number to edit: ", (choice) => {
-            const index = parseInt(choice) - 1; // Lets the user choose which field to update.
+        rl.question("\nType number to edit: ", (choice) => { //chioce here is given the value of a user input (it will be a number)
+            const index = parseInt(choice) - 1; // Lets the user choose which field to update. then convertes their input back into an array index.
 
-            if (index >= 0 && index < patientInformation.length) {
-                const field = patientInformation[index];
+            if (index >= 0 && index < patientInformation.length) { //this clarifies if the user input is within valid bounds (above 0 and less than the overall length of the patientInformation array)
+                const field = patientInformation[index]; //if  input is valid, this retrieves the chosen field value e.g. emailAddress.
 
-                rl.question(`Enter new ${field.prompt}`, (newValue) => {
-                    patient[field.key] = field.key === "birthDate"
+                rl.question(`Enter new ${field.prompt}`, (newValue) => { // this will prompt the user to type a new value for the field they previously selected. the input is then stored in newValue
+                    patient[field.key] = field.key === "birthDate" //if the prompt = birthDate, the users input is converted to a proper date format (YYYY/MM/DD) then is converted to a string before being saved.
                         ? new Date(newValue).toISOString()
                         : newValue;
 
-                    savePatients(patients);
-                    console.log("\nUpdated patient:\n", patient);
-                    adminMenu();
+                    savePatients(patients); //all updated patient information is written back inot the userdata.json file.
+                    console.log("\nUpdated patient:\n", patient); //displays new patient record after its been created
+                    adminMenu(); //back to CRUD menu
                 });
 
             } else {
                 console.log("Invalid selection."); // Handles invalid IDs and bad input cleanly.
-                adminMenu();
+                adminMenu(); //back to CRUD menu
             }
         });
     });
 }
-function deletePatient() {
+function deletePatient() { // this function erases a whole user info document when given a matching ID number. the functiopn double checks deletions before erasing.
     const patients = readAllPatients(); // a variable patients is asigned the value of readallpatients(which reads the entire user file of user data)
 
     rl.question("Enter an ID to Delete Patient: ", (id) => { //prompts the user top type an ID whatever they type gets stored in (id) then findIndex searchs through the patients array for each patient and checking if patientId matches what has been typed
@@ -169,22 +164,22 @@ function deletePatient() {
 
         if (index === -1) { //is index gets to the very end of the array , then no match has been found
             console.log("No Patient Found with That ID. ")
-            adminMenu(); 
+            adminMenu(); //back to CRUD menu
             return; //exit function
         }
         console.log("Patient Found! ");
-        console.log(patients[index]);
+        console.log(patients[index]); // this will log the entire patient profile that was found matching our user input.
 
-        rl.question("Are you sure you want to delete this patient? (yes/no): ", (confirm) => {
+        rl.question("Are you sure you want to delete this patient? (yes/no): ", (confirm) => { //double checking patient deletion
             if (confirm.toLowerCase() === "yes") {
                 patients.splice(index, 1); // remove patient at index
-                savePatients(patients); // save updated data
+                savePatients(patients); // save all updated userdata
                 console.log("✅ Patient deleted.");
             } else {
                 console.log("❎ Deletion cancelled.");
             }
 
-            adminMenu();
+            adminMenu(); //back to CRUD menu
         });
     });
 }
