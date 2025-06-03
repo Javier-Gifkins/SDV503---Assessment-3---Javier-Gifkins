@@ -1,11 +1,11 @@
-//NOTE - Project Overview:
+# Project Overview:
 
-Functionality:
+### Functionality:
 The patient Health Management System will allow patients to manage and update health records stored in a .json format. The project is to develop a command line program enabling users to create, read, update, and delete medical information. At the beginning I will have a prompt asking for an administrator password, if no password can be given the user may only be able to view their own records (no writing).
 
 All my options will be editable in a separate "settings.js" folder for maintainability.
 
-
+editing
 CRUD is an acronym for:
 Create:
 -	Create function allows users to create a record in a database, but only someone with administrative permission may create new data.
@@ -20,7 +20,8 @@ CRUD principles are essential for almost any data driven application, this progr
 
 This program will organise and edit fictional patient records in the form of .json files. This program will read, edit, delete, or recall results. It will keep records private unless accessed by a doctor or someone with the right permissions, or if accessed by a patient, only their records will be readable. I also want all my options to be editable in a separate settings folder for maximum maintainability.
 
-//NOTE - Instructions/Requirements
+
+### Instructions/Requirements
 
 Environment: Node.js (install from nodejs.org)
 Run it from terminal: typing "node main.js"
@@ -34,7 +35,7 @@ fs (File System module) for reading/writing JSON files
 
 
 
-//NOTE - Psuedo Code
+### Psuedo Code
 
 START
 Display "Welcome"
@@ -124,7 +125,8 @@ WHILE TRUE
    
 END
 
-//NOTE - Key Functions
+
+### Key Functions
 
 JSON.parse() / JSON.stringify() (to manage the data)
 createPatientRecord()
