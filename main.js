@@ -1,12 +1,16 @@
 //SECTION - Imports
+//NOTE Documentation and notes not up to date (fix reademe)
 
-//the are inbulit modules in Node, File System & Readline.
+//the are inbuilt modules in Node, File System & Readline.
 const fs = require("fs");
 const readline = require("readline");
+
 //Path is also an inbuilt modeule, this accesses the path to the directory where the current script is found
 const path = require("path");
+
 //This creates the full path to the userData.json and stores it in filePath.
 const filePath = path.join(__dirname, "../SDV503---Assessment-3---Javier-Gifkins/userData.json");
+
 //Faker in not built in so had to be added to dependancies in the package-lock.json
 const {faker} = require("@faker-js/faker")
 
@@ -16,10 +20,7 @@ const rl = readline.createInterface({
     output : process.stdout,
 })
 
-
-
 //SECTION - Settings
-
 const adminPassword = "password123"
 
 // this array is called by many important functions mainly create new patient and edit patient info. it can be easily updated if we require a new field later such as allergies or medications.
@@ -41,35 +42,40 @@ const patientInformation = [
 
 //SECTION - Security Functions
 
-function checkPassword(inputPassword) { // function checking if input password matches the const found in setting.js returns boolian value, truthy or falsie depending on the input.
-    return inputPassword === adminPassword; // return true if input password scrict equals admin password found in settings. otherwise falsie.
+// function checking if input password matches the const found in setting.js returns boolian value, truthy if input password scrict equals admin password found in settings. otherwise falsie.
+function checkPassword(inputPassword) { 
+    return inputPassword === adminPassword; 
 }
+//NOTE Update notes, perhaps too many comments
 
 
 //SECTION - Data Read/Search Functions
 
-function readAllPatients() { //this function returns the entire patient information file as a huge javascript object.
-    const data = fs.readFileSync(filePath, "utf-8"); // this reads the userData.json file and encodes is as a utf8 string
-    return JSON.parse(data); // the entire file in ther form of a string is then parsed and returned as a js object
+//this function returns the entire patient information file as a huge javascript object. // this reads the userData.json file and encodes is as a utf8 string // the entire file in ther form of a string is then parsed and returned as a js object.
+function readAllPatients() { 
+    const data = fs.readFileSync(filePath, "utf-8"); 
+    return JSON.parse(data); 
 }
-function findPatientByID(id) { //(id)will be a user input and a little utf8 string, then searches the userdata file using the find() method to search for the first match with (id)
-    const patients = readAllPatients(); // calls previous function to gather all userdata as a giant huge utf8 string
 
-    return patients.find((p) => p.patientId === id); // uses a find() method to search for the first match with (id) returns undefined if no matching string is found in the patient information file.
+//(id)will be a user input and a little utf8 string, then searches the userdata file using the find() method to search for the first match with (id) // calls previous function to gather all userdata as a giant huge utf8 string // uses a find() method to search for the first match with (id) returns undefined if no matching string is found in the patient information file.
+function findPatientByID(id) {
+    const patients = readAllPatients(); 
+    return patients.find((p) => p.patientId === id); 
 }
-function adminMenu() { //this function displays a menu for healthcare workers. it displays every option available for editting patient data. there are 5 options for this: "1" creates a new record, "2" searches for and displays a single record, "3" is used to edit patient values within a record, "4" deletes an entire patient record, and "5" exits the program.This function uses readline to get user inputs and calls the appropriate function for the job.
-    console.log("\n=== Admin Menu ==="); // a menu is displayed for data editing purposes
+function adminMenu() { //this function displays a menu for healthcare workers. it displays every option available for editting patient data. there are 5 options for this: "1" creates a new record, "2" searches for and displays a single record, "3" is used to edit patient values within a record, "4" deletes an entire patient record, and "5" exits the program.This function uses readline to get user inputs and calls the appropriate function for the job. // a menu is displayed for data editing purposes
+    console.log("\n=== Admin Menu ==="); 
     console.log("1. Create Record");
     console.log("2. Read Record");
     console.log("3. Update Record");
     console.log("4. Delete Record");
     console.log("5. Exit");
 
-    rl.question("Choose an option (1-5): ", (choice) => { //a user is questioned and (choice) is assigned the value of whatever they type.
-        if (choice === "1") {
+    //a user is questioned and (choice) is assigned the value of whatever they type.
+    rl.question("Choose an option (1-5): ", (choice) => { 
+        if (choice === "1") { //NOTE These if statements might benefit by being replaced by a switch statement 
             createPatient(); //if user types "1" createPatient() is called
         } else if (choice === "2") {
-            rl.question("Enter Patient ID to look up: ", (id) => { //the user wants to search for a patient, their input here becomes the value of (id)
+            rl.question("Enter Patient ID to look up: ", (id) => { //the user wants to search for a patient, their input here becomes the value of (id) //NOTE I believe this is phrased backwards
                 const patient = findPatientByID(id); //variable patient is asigned the value of the users input after its been passed to the findPatientByID function
 
                 if (patient) { //if matching id is found that matchiong patient profile is logged to the console
@@ -97,34 +103,41 @@ function adminMenu() { //this function displays a menu for healthcare workers. i
 
 //SECTION - Data Editting Functions
 
-
-function generatePatientID () { // Function to Generate a random ID using faker module e.g. (P-ABH2QUHL).
-    return `P-${faker.string.alphanumeric(8).toUpperCase()}` // Gererating a new ID number with faker module ("p-" + 8 random uppercase chars) in string format
+// Function to Generate a random ID using faker module e.g. (P-ABH2QUHL). // Gererating a new ID number with faker module ("p-" + 8 random uppercase chars) in string format
+function generatePatientID () { 
+    return `P-${faker.string.alphanumeric(8).toUpperCase()}` 
 }
-function savePatients(data) { //this function uses the file system module to stringify the entire userdata file. then write the updated information back into the json file, effectively overwriting it with any updated information.
+
+//this function uses the file system module to stringify the entire userdata file. then write the updated information back into the json file, effectively overwriting it with any updated information.
+function savePatients(data) { 
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
 }
-function createPatient() { //this fucntion creates a new patient record by asking the user a series of questions involving patient values, then saves the new patient to the userData file.
-    const patient = { patientId: generatePatientID() }; //first a new ID is generated at random. and is assigned to the value of pateintId in the new record.
+
+//this fucntion creates a new patient record by asking the user a series of questions involving patient values, then saves the new patient to the userData file. //first a new ID is generated at random. and is assigned to the value of pateintId in the new record.
+function createPatient() { 
+    const patient = { patientId: generatePatientID() }; 
     let i = 0;
 
-    function nextQuestion() { //is a nested function. and cannot exist globally. its only ever used inside this createPatient function.
-        if (i < patientInformation.length) { //if i is less than the length of patient information, this means not all questions have been answered yet 
-            rl.question(patientInformation[i].prompt, (answer) => { //this displays the question prompt and stores each answer given, saving it to the the patient object  
+    //is a nested function. and cannot exist globally. its only ever used inside this createPatient function. //if i is less than the length of patient information, this means not all questions have been answered yet  //this displays the question prompt and stores each answer given, saving it to the the patient object //if the question is birthDate, the users input is converted to a proper date format (YYYY/MM/DD) then is converted to a string. //i is increased by 1 and saved each time a question is asked
+    function nextQuestion() { 
+        if (i < patientInformation.length) { 
+            rl.question(patientInformation[i].prompt, (answer) => {
                 patient[patientInformation[i].key] = patientInformation[i].key === "birthDate"
-                    ? new Date(answer).toISOString() //if the question is birthDate, the users input is converted to a proper date format (YYYY/MM/DD) then is converted to a string.
+                    ? new Date(answer).toISOString() 
                     : answer;
-                i++; //i is increased by 1 and saved each time a question is asked
+                i++; 
                 nextQuestion(); 
             });
 
-        } else { //when i === patientInformation.length, then the patient values have all been answered
+        //when i === patientInformation.length, then the patient values have all been answered
+        } else { 
 
-            const patients = readAllPatients(); //this reads every existing patient already in the file
-            patients.push(patient); //then the newly created document is added to the information
-            savePatients(patients); //entire updated patient info file is then rewritten to the data file. the new record is only saved once all these patient values have been answered by the user.
-            console.log("\nPatient Created:\n", patient); //displays new patient object after its been saved.
-            adminMenu(); //back to editting menu
+             //this reads every existing patient already in the file //then the newly created document is added to the information //entire updated patient info file is then rewritten to the data file. the new record is only saved once all these patient values have been answered by the user. //displays new patient object after its been saved.  //back to editting menu
+            const patients = readAllPatients();
+            patients.push(patient); 
+            savePatients(patients); 
+            console.log("\nPatient Created:\n", patient); 
+            adminMenu();
         }
     }
     nextQuestion(); //nested function repeats itself.

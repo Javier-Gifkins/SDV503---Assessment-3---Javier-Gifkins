@@ -3,22 +3,34 @@
 ### Functionality:
 The patient Health Management System will allow patients to manage and update health records stored in a .json format. The project is to develop a command line program enabling users to create, read, update, and delete medical information. At the beginning I will have a prompt asking for an administrator password, if no password can be given the user may only be able to view their own records (no writing).
 
-All my options will be editable in a separate "settings.js" folder for maintainability.
 
-editing
-CRUD is an acronym for:
-Create:
--	Create function allows users to create a record in a database, but only someone with administrative permission may create new data.
-Read:
--	Read function will work similarly to a search. This will allow the user to retrieve specific records within the data, this may be done using keywords or dates.
-Update:
--	The update function will be used to modify records in the data, by allowing certain input. Only those with permission will be able to modify data.
-Delete:
--	This will be used to delete records perhaps unused. Some databases have a soft delete option where the data is marked as deleted while leaving it intact. However, in my program I won’t be including this feature.
 
-CRUD principles are essential for almost any data driven application, this program will be no different, relying on manipulating .json files as records.
+
+:smile:
+
 
 This program will organise and edit fictional patient records in the form of .json files. This program will read, edit, delete, or recall results. It will keep records private unless accessed by a doctor or someone with the right permissions, or if accessed by a patient, only their records will be readable. I also want all my options to be editable in a separate settings folder for maximum maintainability.
+
+[Link to Repository](https://github.com/Javier-Gifkins/SDV503---Assessment-3---Javier-Gifkins.git)
+
+
+### Best Coding Practices Checklist
+
+
+- [x] Maintain consistent indentation throughout code
+- [x] Use camelCase for variables and functions
+- [ ] Follow DRY (Don't Repeat Yourself) principles
+- [ ] Keep line lengths reasonable and readable
+- [x] Separate code and data (JSON, JS)
+- [ ] Maintain consistent file structure
+- [ ] Keep documentation up to date (Readme, Comments)
+- [x] Declare variables with const or let (avoid var)
+- [ ] Use strict equality operators (=== and !==)
+- [ ] Add comments for complex logic
+- [ ] Handle errors with try-catch blocks
+- [x] Use camelCase for variable and function names
+
+
 
 
 ### Instructions/Requirements
