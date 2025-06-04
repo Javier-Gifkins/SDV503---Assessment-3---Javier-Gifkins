@@ -15,7 +15,7 @@ const filePath = path.join(__dirname,
     "../SDV503---Assessment-3---Javier-Gifkins/userData.json");
 
 //Faker in not built in, and so has to be added to dependancies in the package-lock.json
-const {faker} = require("@faker-js/faker")
+const { faker } = require("@faker-js/faker");
 
 /**
  * this code creates a readline interface in node.
@@ -23,8 +23,8 @@ const {faker} = require("@faker-js/faker")
  * its a good way to handle command line inputs and prompts.
  */
 const rl = readline.createInterface({
-    input : process.stdin,
-    output : process.stdout,
+    input: process.stdin,
+    output: process.stdout,
 })
 
 //SECTION - Settings
@@ -110,36 +110,82 @@ function adminMenu() {
     console.log("4. Delete Record");
     console.log("5. Exit");
 
+  rl.question('Choose an option (1-5): ', (choice) => {
+    switch (choice) {
+      case '1':
+        createPatient();
+        break;
+      
+      case '2':
+        rl.question('Enter Patient ID to look up: ', (id) => {
+          const patient = findPatientByID(id);
 
-    //NOTE These if statements might benefit by being replaced by a switch/case statement 
+          if (patient) {
+            console.log('\nPatient Found: ', patient);
+            adminMenu();
+            return;
+          }
+          
+          console.log('\nNo patient found with that ID.');
+          adminMenu();
+        });
+        break;
+      
+      case '3':
+        editPatientInfo();
+        break;
+      
+      case '4':
+        deletePatient();
+        break;
+      
+      case '5':
+        console.log('Goodbye!');
+        rl.close();
+        break;
+      
+      default:
+        console.log('Invalid Number. Please try again.');
+        adminMenu();
+    }
+  });
+};
 
-    rl.question("Choose an option (1-5): ", (choice) => { 
-        if (choice === "1") { 
-            createPatient(); 
-        } else if (choice === "2") {
-            rl.question("Enter Patient ID to look up: ", (id) => { 
-                const patient = findPatientByID(id); 
 
-                if (patient) { 
-                    console.log("\nPatient Found: ", patient);
-                } else { 
-                    console.log("\nNo patient found with that ID.");
-                }
-                adminMenu(); 
-            });
-        } else if (choice === "3") { 
-            editPatientInfo();
-        } else if (choice === "4") { 
-            deletePatient();
-        } else if (choice === "5") { 
-            console.log("Goodbye!");
-            rl.close();
-        } else {
-            console.log("Invalid option. Please try again."); 
-            adminMenu(); 
-        }
-    });
-}
+
+//     rl.question("Choose an option (1-5): ", (choice) => { 
+
+//         if (choice === "1") { 
+//             createPatient(); 
+
+//         } else if (choice === "2") {
+//             rl.question("Enter Patient ID to look up: ", (id) => { 
+//                 const patient = findPatientByID(id); 
+
+//                 if (patient) { 
+//                     console.log("\nPatient Found: ", patient);
+//                 } else { 
+//                     console.log("\nNo patient found with that ID.");
+//                 }
+//                 adminMenu(); 
+//             });
+
+//         } else if (choice === "3") { 
+//             editPatientInfo();
+
+//         } else if (choice === "4") { 
+//             deletePatient();
+
+//         } else if (choice === "5") { 
+//             console.log("Goodbye!");
+//             rl.close();
+
+//         } else {
+//             console.log("Invalid option. Please try again."); 
+//             adminMenu(); 
+//         }
+//     });
+// }
 
 //SECTION - Data Editting Functions
 
