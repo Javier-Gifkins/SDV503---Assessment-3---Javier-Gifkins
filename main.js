@@ -1,5 +1,4 @@
-//SECTION - Imports
-//NOTE Documentation and notes not up to date (fix reademe)
+//SECTION - Imports & Setup
 
 /**
  * File System & Readline are inbuilt modules in Node. 
@@ -10,7 +9,7 @@ const fs = require("fs");
 const readline = require("readline");
 const path = require("path");
 
-//This creates the full path to the userData.json file and stores it in filePath.
+//This code creates the full path to the userData.json file and stores it in filePath.
 const filePath = path.join(__dirname,
     "../SDV503---Assessment-3---Javier-Gifkins/userData.json");
 
@@ -28,6 +27,7 @@ const rl = readline.createInterface({
 })
 
 //SECTION - Settings
+
 const adminPassword = "password123"
 
 /**
@@ -61,10 +61,7 @@ function checkPassword(inputPassword) {
 }
 
 
-
-
 //SECTION - Data Read/Search Functions
-
 
 /**
  * this function returns the entire patient information file as one javascript object. 
@@ -151,41 +148,6 @@ function adminMenu() {
   });
 };
 
-
-
-//     rl.question("Choose an option (1-5): ", (choice) => { 
-
-//         if (choice === "1") { 
-//             createPatient(); 
-
-//         } else if (choice === "2") {
-//             rl.question("Enter Patient ID to look up: ", (id) => { 
-//                 const patient = findPatientByID(id); 
-
-//                 if (patient) { 
-//                     console.log("\nPatient Found: ", patient);
-//                 } else { 
-//                     console.log("\nNo patient found with that ID.");
-//                 }
-//                 adminMenu(); 
-//             });
-
-//         } else if (choice === "3") { 
-//             editPatientInfo();
-
-//         } else if (choice === "4") { 
-//             deletePatient();
-
-//         } else if (choice === "5") { 
-//             console.log("Goodbye!");
-//             rl.close();
-
-//         } else {
-//             console.log("Invalid option. Please try again."); 
-//             adminMenu(); 
-//         }
-//     });
-// }
 
 //SECTION - Data Editting Functions
 
@@ -371,9 +333,6 @@ function deletePatient() {
  * if checkpassword returns false, the user is questioned for their patient id. 
  * if it matches any information from the patient information file then 
  * only that matching patient profile is logged to console.
- * 
- * 
- * 
  */
 
 function mainLoop() { // 
