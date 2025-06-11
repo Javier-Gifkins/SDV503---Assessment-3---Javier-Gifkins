@@ -2,9 +2,8 @@
 
 
 ### Functionality:
-The patient Health Management System will allow patients to manage and update health records stored in a .json format. The project is to develop a command line program enabling users to create, read, update, and delete medical information. At the beginning I will have a prompt asking for an administrator password, if no password can be given the user may only be able to view their own records (no writing).
-
-
+The patient Health Management System will allow patients to manage and update health records stored in a .json format. This program will be able to query this json data as if it’s a lightweight document style database, where each document represents a patient.
+The project is to develop a command line program enabling users to create, read, update, and delete medical information. At the beginning I will have a prompt asking for an administrator password, if no password can be given the user may only be able to view their own records (no writing new data).
 
 
 :smile:
@@ -20,15 +19,15 @@ This program will organise and edit fictional patient records in the form of .js
 
 - [x] Maintain consistent indentation throughout code
 - [x] Use camelCase for variables and functions
-- [ ] Follow DRY (Don't Repeat Yourself) principles
+- [X] Follow DRY (Don't Repeat Yourself) principles
 - [x] Keep line lengths reasonable and readable
 - [x] Separate code and data (JSON, JS)
-- [ ] Maintain consistent file structure
-- [ ] Keep documentation up to date (Readme, Comments)
+- [X] Maintain consistent file structure
+- [X] Keep documentation up to date (Readme, Comments)
 - [x] Declare variables with const or let (avoid var)
 - [x] Use strict equality operators (=== and !==)
 - [x] Add comments for complex logic
-- [ ] Handle errors with try-catch blocks
+- [X] Handle errors with try-catch blocks
 - [x] Use camelCase for variable and function names
 
 
@@ -36,15 +35,49 @@ This program will organise and edit fictional patient records in the form of .js
 
 ### Instructions/Requirements
 
-Environment: Node.js (install from nodejs.org)
-Run it from terminal: typing "node main.js"
+Software Needed:
+-	Node.js (version 14.0 or higher)
 
-Use these built-in Node.js modules:
+Dependencies:
+-	@faker-js/faker
 
-readline for user input
-readline module (for input/output in terminal)
-fs for JSON file storage
-fs (File System module) for reading/writing JSON files
+INSTALLATION
+-	Install Node.js from nodejs.org
+-	Open a Node terminal inside vscode
+-	Run: ‘npm install @faker-js/faker’
+-	Run The Program: Type “node main.js”
+
+Starting the Program:
+-	Enter correct password or press Enter for guest access.
+
+Guest Access:
+-	Can only view 1 patient record at a time
+-	Enter patient ID to see medical information
+-	Cannot edit or delete
+
+Admin Access:
+-	Password: password123
+-	Has the Ability to create, read, update, and delete patient records
+
+Admin Menu Options:
+-	Create Record - Add new patient
+-	Read Record - View patient by ID
+-	Update Record - Edit patient information
+-	Delete Record - Remove patient
+-	Exit - Close program
+
+Patient Information Fields:
+-	Patient ID. Automatically generated as P-XXXXXXXX
+-	Name
+-	Email
+-	Phone
+-	Address
+-	City
+-	Country
+-	Job Title
+-	Birth Date (use format: yyyy/MM/DD)
+-	Blood Type
+
 
 
 
